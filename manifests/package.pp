@@ -18,7 +18,7 @@ class nexus::package {
       $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/$(ls -d nexus-*|tail -1) /opt/sonatype-nexus/nexus"
     }
     /^[0-9]+[0-9\.]+/: {
-      $url = regsubst($::nexus::params::download_url, '__VERSION__', $::nexus::ensure)
+      $url = regsubst($::nexus::params::download_url, '__VERSION__', $::nexus::version)
       $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/nexus-${::ensure} /opt/sonatype-nexus/nexus"
     }
     default: {
