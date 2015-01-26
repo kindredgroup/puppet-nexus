@@ -35,7 +35,7 @@
 #
 # Copyright 2015 Your name here, unless otherwise noted.
 #
-class nexus ( 
+class nexus (
   $ensure          = 'present',
   $version         = 'latest',
   $service_ensure  = 'running',

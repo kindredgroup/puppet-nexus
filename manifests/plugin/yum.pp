@@ -1,4 +1,4 @@
-class nexus::plugin::yum ( 
+class nexus::plugin::yum (
   $version = $::nexus::version
 ) {
 

@@ -21,6 +21,9 @@ class nexus::package {
       $url = regsubst($::nexus::params::download_url, '__VERSION__', $::nexus::ensure)
       $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/nexus-${::ensure} /opt/sonatype-nexus/nexus"
     }
+    default: {
+      fail("Could not parse version ${::nexus::version}")
+    }
   }
 
   exec { 'install_nexus':
@@ -37,8 +40,8 @@ class nexus::package {
   }
 
   file { '/etc/init.d/nexus':
-    ensure => link,
-    target => '/opt/sonatype-nexus/nexus/bin/nexus',
+    ensure  => link,
+    target  => '/opt/sonatype-nexus/nexus/bin/nexus',
     require => Exec['install_nexus']
   }
 
