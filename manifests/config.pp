@@ -1,3 +1,7 @@
+# == Class: nexus::config
+#
+# Manages configuration entities
+#
 class nexus::config {
 
   file_line { 'nexus_initscript_user':

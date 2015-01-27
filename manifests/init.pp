@@ -1,39 +1,42 @@
 # == Class: nexus
 #
-# Full description of class nexus here.
+# Manages Sonatype Nexus maven (and other) artefact repository
 #
 # === Parameters
 #
-# Document parameters here.
+# [*ensure*]
+#   Ensurable
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*version*]
+#   Version of Nexus to install, used to form the download url to the tar ball
+#   See $download_url in params.pp
 #
-# === Variables
+# [*service_ensure*]
+#   Service ensureable
 #
-# Here you should define a list of variables that this module would require.
+# [*service_enable*]
+#   Service enable
 #
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
+# [*service_refresh*]
+#   Boolean if config changes should restart the Nexus daemon
+#
+# [*port*]
+#   Http listener port for Nexus
+#
+# [*manage_user*]
+#   Boolean if user and group in user.pp should be used as fallback
 #
 # === Examples
 #
-#  class { nexus:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#  }
+# include ::nexus
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Johan Lyheden <johan.lyheden@unibet.com>
 #
 # === Copyright
 #
-# Copyright 2015 Your name here, unless otherwise noted.
+# Copyright 2015 North Development AB, unless otherwise noted.
 #
 class nexus (
   $ensure          = 'present',
@@ -41,13 +44,15 @@ class nexus (
   $service_ensure  = 'running',
   $service_enable  = true,
   $service_refresh = true,
-  $port            = 8080
+  $port            = 8080,
+  $manage_user     = true
 ) inherits ::nexus::params {
 
   # contain the class
   anchor { '::nexus::begin': } ->
   class { '::nexus::user': } ->
   class { '::nexus::package': } ->
+  class { '::nexus::files': } ->
   class { '::nexus::config': } ->
   class { '::nexus::service': } ->
   anchor { '::nexus::end': }

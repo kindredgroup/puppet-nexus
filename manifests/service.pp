@@ -1,3 +1,7 @@
+# == Class: nexus::service
+#
+# Manages the Nexus daemon
+#
 class nexus::service {
 
   service { 'nexus':

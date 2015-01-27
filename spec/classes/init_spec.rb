@@ -2,6 +2,7 @@ require 'spec_helper'
 describe 'nexus' do
 
   context 'with defaults for all parameters' do
-    it { should contain_class('nexus') }
+    it { should compile.with_all_deps }
   end
+
 end
