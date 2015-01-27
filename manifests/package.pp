@@ -19,7 +19,7 @@ class nexus::package {
     }
     /^[0-9]+[0-9\.]+/: {
       $url = regsubst($::nexus::params::download_url, '__VERSION__', $::nexus::version)
-      $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/nexus-${::ensure} /opt/sonatype-nexus/nexus"
+      $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/nexus-${::nexus::version} /opt/sonatype-nexus/nexus"
     }
     default: {
       fail("Could not parse version ${::nexus::version}")

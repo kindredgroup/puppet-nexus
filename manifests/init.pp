@@ -45,7 +45,8 @@ class nexus (
   $service_enable  = true,
   $service_refresh = true,
   $port            = 8080,
-  $manage_user     = true
+  $manage_user     = true,
+  $plugins         = []
 ) inherits ::nexus::params {
 
   # contain the class
@@ -57,9 +58,19 @@ class nexus (
   class { '::nexus::service': } ->
   anchor { '::nexus::end': }
 
+  if !empty($plugins) {
+    $plugin_classes = regsubst($plugins, '(.*)', '::nexus::plugin::\1')
+    class { $plugin_classes:
+      before => Class['::nexus::service']
+    }
+  } else {
+    $plugin_classes = []
+  }
+
   if $service_refresh {
     Class['::nexus::package'] ~> Class['::nexus::service']
     Class['::nexus::config'] ~> Class['::nexus::service']
+    Class[$plugin_classes] ~> Class['::nexus::service']
   }
 
 }

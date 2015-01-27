@@ -7,5 +7,7 @@ package { $java_packages: ensure => installed }
 
 # install requirements to maven class
 package { ['tar', 'gzip', 'wget']: ensure => present } ->
-class { '::nexus': }
-class { '::nexus::plugin::yum': }
+class { '::nexus':
+  version => '2.11.1-01',
+  plugins => ['yum']
+}
