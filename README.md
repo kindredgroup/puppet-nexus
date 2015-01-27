@@ -1,5 +1,7 @@
 # nexus
 
+[![Build Status](https://secure.travis-ci.org/unibet/puppet-nexus.png)](http://travis-ci.org/unibet/puppet-nexus)
+
 #### Table of Contents
 
 1. [Overview](#overview)
