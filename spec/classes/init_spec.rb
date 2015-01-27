@@ -17,4 +17,13 @@ describe 'nexus' do
     it { should compile.with_all_deps }
 
   end
+
+  context 'teardown' do
+    let (:params) do {
+      :ensure => 'absent'
+    } end
+
+    it { should compile.with_all_deps }
+  end
+
 end

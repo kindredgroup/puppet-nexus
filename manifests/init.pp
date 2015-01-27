@@ -50,27 +50,45 @@ class nexus (
 ) inherits ::nexus::params {
 
   # contain the class
-  anchor { '::nexus::begin': } ->
-  class { '::nexus::user': } ->
-  class { '::nexus::package': } ->
-  class { '::nexus::files': } ->
-  class { '::nexus::config': } ->
-  class { '::nexus::service': } ->
-  anchor { '::nexus::end': }
+  case $ensure {
+    present: {
+      anchor { '::nexus::begin': } ->
+      class { '::nexus::user': } ->
+      class { '::nexus::package': } ->
+      class { '::nexus::files': } ->
+      class { '::nexus::config': } ->
+      class { '::nexus::service': } ->
+      anchor { '::nexus::end': }
 
-  if !empty($plugins) {
-    $plugin_classes = regsubst($plugins, '(.*)', '::nexus::plugin::\1')
-    class { $plugin_classes:
-      before => Class['::nexus::service']
+      if !empty($plugins) {
+        $plugin_classes = regsubst($plugins, '(.*)', '::nexus::plugin::\1')
+        class { $plugin_classes:
+          before => Class['::nexus::service']
+        }
+      } else {
+        $plugin_classes = []
+      }
+
+      if $service_refresh {
+        Class['::nexus::package'] ~> Class['::nexus::service']
+        Class['::nexus::config'] ~> Class['::nexus::service']
+        Class[$plugin_classes] ~> Class['::nexus::service']
+      }
     }
-  } else {
-    $plugin_classes = []
-  }
 
-  if $service_refresh {
-    Class['::nexus::package'] ~> Class['::nexus::service']
-    Class['::nexus::config'] ~> Class['::nexus::service']
-    Class[$plugin_classes] ~> Class['::nexus::service']
+    absent: {
+      anchor { '::nexus::begin': } ->
+      class { '::nexus::service': } ->
+      class { '::nexus::files': } ->
+      class { '::nexus::package': } ->
+      class { '::nexus::user': } ->
+      anchor { '::nexus::end': }
+    }
+
+    default: {
+      fail("Unsupported ensure value ${ensure}")
+    }
+
   }
 
 }
