@@ -26,6 +26,9 @@
 # [*manage_user*]
 #   Boolean if user and group in user.pp should be used as fallback
 #
+# [*plugins*]
+#   Array of plugins to install, must be ::nexus::plugin::<THIS> class
+#
 # === Examples
 #
 # include ::nexus
