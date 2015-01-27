@@ -9,9 +9,7 @@
 #
 class nexus::plugin::yum (
   $version = $::nexus::version
-) {
-
-  require ::nexus
+) inherits ::nexus::params {
 
   if !defined(Package['createrepo']) {
     package { 'createrepo':

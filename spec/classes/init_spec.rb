@@ -14,5 +14,7 @@ describe 'nexus' do
       should contain_class('nexus::plugin::yum')
     }
 
+    it { should compile.with_all_deps }
+
   end
 end
