@@ -1,5 +1,5 @@
 {
-  "name": "puppet-nexus",
+  "name": "unibet-nexus",
   "version": "0.1.0",
   "author": "unibet",
   "summary": "Manages Sonatype Nexus",
