@@ -15,7 +15,8 @@ class nexus::files {
 
       file { '/opt/sonatype-nexus/nexus/logs':
         ensure => link,
-        target => '/var/log/nexus'
+        target => '/var/log/nexus',
+        force  => true
       }
 
       file { '/opt/sonatype-nexus/sonatype-work/nexus/plugin-repository':
