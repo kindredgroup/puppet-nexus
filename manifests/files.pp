@@ -13,7 +13,7 @@ class nexus::files {
         mode   => '0755'
       }
 
-      file { '/opt/sonatype-nexus/nexus/log':
+      file { '/opt/sonatype-nexus/nexus/logs':
         ensure => link,
         target => '/var/log/nexus'
       }
