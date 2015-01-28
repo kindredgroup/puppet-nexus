@@ -22,4 +22,36 @@ class nexus::config {
     match => '^application-port'
   }
 
+  if $::nexus::initmemory {
+    file_line { 'nexus_initmemory':
+      path  => '/opt/sonatype-nexus/nexus/bin/jsw/conf/wrapper.conf',
+      line  => "wrapper.java.initmemory=${::nexus::initmemory}",
+      match => '^wrapper.java.initmemory='
+    }
+  }
+
+  if $::nexus::maxmemory {
+    file_line { 'nexus_maxmemory':
+      path  => '/opt/sonatype-nexus/nexus/bin/jsw/conf/wrapper.conf',
+      line  => "wrapper.java.maxmemory=${::nexus::maxmemory}",
+      match => '^wrapper.java.maxmemory='
+    }
+  }
+
+  if $::nexus::maxpermsize {
+    file_line { 'nexus_permgen':
+      path  => '/opt/sonatype-nexus/nexus/bin/jsw/conf/wrapper.conf',
+      line  => "wrapper.java.additional.1=-XX:MaxPermSize=${::nexus::maxpermsize}",
+      match => '^wrapper.java.additional.1=-XX:MaxPermSize='
+    }
+  }
+
+  if $::nexus::javacommand {
+    file_line { 'nexus_javacommand':
+      path  => '/opt/sonatype-nexus/nexus/bin/jsw/conf/wrapper.conf',
+      line  => "wrapper.java.command=${::nexus::javacommand}",
+      match => '^wrapper.java.command='
+    }
+  }
+
 }

@@ -26,6 +26,18 @@
 # [*manage_user*]
 #   Boolean if user and group in user.pp should be used as fallback
 #
+# [*initmemory*]
+#   Optional Nexus jvm Xms parameter in megabytes
+#
+# [*maxmemory*]
+#   Optional Nexus jvm Xmx parameter in megabytes
+#
+# [*maxpermsize*]
+#   Optional Nexus jvm permgen size with unit suffix (ex: 123M)
+#
+# [*javacommand*]
+#   Optional Name or full path to java executable
+#
 # [*plugins*]
 #   Array of plugins to install, must be ::nexus::plugin::<THIS> class
 #
@@ -49,6 +61,10 @@ class nexus (
   $service_refresh = true,
   $port            = 8080,
   $manage_user     = true,
+  $initmemory      = undef,
+  $maxmemory       = undef,
+  $maxpermsize     = undef,
+  $javacommand     = undef,
   $plugins         = []
 ) inherits ::nexus::params {
 

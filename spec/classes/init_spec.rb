@@ -3,6 +3,14 @@ describe 'nexus' do
 
   context 'with defaults for all parameters' do
     it { should compile.with_all_deps }
+
+    it "should not contain changes in wrapper.conf" do
+      should_not contain_file_line('nexus_initmemory')
+      should_not contain_file_line('nexus_maxmemory')
+      should_not contain_file_line('nexus_permgen')
+      should_not contain_file_line('nexus_javacommand')
+    end
+
   end
 
   context 'with plugin yum' do
@@ -24,6 +32,18 @@ describe 'nexus' do
     } end
 
     it { should compile.with_all_deps }
+  end
+
+  context 'with jvm settings' do
+    let (:params) do {
+      :initmemory => 1234
+    } end
+
+    it {
+      should contain_file_line('nexus_initmemory').with(
+        :line => 'wrapper.java.initmemory=1234'
+      )
+    }
   end
 
 end
