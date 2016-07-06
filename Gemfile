@@ -16,6 +16,7 @@ group :rspec do
   gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git'
   gem 'puppet-syntax'
   gem 'metadata-json-lint'
+  gem 'puppet-blacksmith'
 end
 
 group :kitchen do
