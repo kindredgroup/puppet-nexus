@@ -65,7 +65,8 @@ class nexus (
   $maxmemory       = undef,
   $maxpermsize     = undef,
   $javacommand     = undef,
-  $plugins         = []
+  $plugins         = [],
+  $download_url    = $::nexus::params::download_url,
 ) inherits ::nexus::params {
 
   # contain the class

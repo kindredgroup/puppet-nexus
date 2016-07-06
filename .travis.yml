@@ -1,3 +1,25 @@
-rvm: 1.9.3
-env:
-  - PUPPET_VERSION=3.7.3
+sudo: false
+language: ruby
+bundler_args: --without kitchen
+script:
+  - bundle exec rake lint
+  - bundle exec rake validate
+  - bundle exec rake spec
+matrix:
+  include:
+  - rvm: 2.1.6
+    env: PUPPET_VERSION="= 3.7.3" DEPLOY="true"
+  - rvm: 2.1.6
+    env: PUPPET_VERSION="= 3.7.3" FUTURE_PARSER="yes"
+  - rvm: 2.1.6
+    env: PUPPET_VERSION="~> 4.0"
+deploy:
+  provider: puppetforge
+  on:
+    tags: true
+    branch: master
+    condition: "$DEPLOY = true"
+  user:
+    secure: "C4USNtlKvPlbZtK2nHPQpSpVhDFsC1UGQ4/J5VC5gvFlvPD52GERK++6ypvXto7W9jXZ7JuCqPrZaeUK4Q2biTMAMiLNQc7O2tk7YFhRqcYB4FQQYEwtJEsuSgBvrffSNtevc6UVrER+vAljbGgwchT9ej6gAYbXYMjjEgHrppQ="
+  password:
+    secure: "drPIS1NIVv5+02heOFj1qdPUumEhtdXMI7FmJLWGtHKHON1VwvePTOBgxg8i26G3IZtnc9XnWJrTVq1EcKpo6W6kQ3W7ChJvSS0D35wDd1gq9ybbYesMFc13/y43TZa/I9v+lo/3IhOPh79Z/sAsF2Z8peWUKK75Bssz7WWVdwg="

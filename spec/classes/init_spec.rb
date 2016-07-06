@@ -46,4 +46,16 @@ describe 'nexus' do
     }
   end
 
+  context 'with nexus version 3' do
+    let (:params) do
+      {
+        :version => '3.0.0-03',
+        :initmemory => '1234M'
+      }
+    end
+
+    it { should compile.with_all_deps }
+    it { should contain_file_line('nexus_initmemory').with_line('-Xms1234M') }
+
+  end
 end

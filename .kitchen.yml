@@ -9,6 +9,8 @@ driver:
   dns: <%= ENV.fetch('DNS_RESOLVER', '8.8.8.8') %>
 <% else %>
 driver:
+  customize:
+    memory: 2048
   name: vagrant
 <% end %>
 
@@ -27,17 +29,24 @@ platforms:
       platform: centos
 <% else %>
 platforms:
-  - name: vbox-centos-64
+  - name: centos6
     driver_plugin: vagrant
     driver_config:
-      box: centos-64-x64-vbox4210
-      box_url: http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210.box
-  - name: vbox-ubuntu-server-12042
+      box: puppetlabs/centos-6.6-64-nocm
+  - name: centos7
     driver_plugin: vagrant
     driver_config:
-      box: ubuntu-server-12042-x64-vbox4210
-      box_url: http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-vbox4210.box
+      box: centos/7
+  - name: ubuntu1204
+    driver_plugin: vagrant
+    driver_config:
+      box: puppetlabs/ubuntu-12.04-64-nocm
+  - name: ubuntu1404
+    driver_plugin: vagrant
+    driver_config:
+      box: puppetlabs/ubuntu-14.04-64-nocm
 <% end %>
 
 suites:
   - name: default
+  - name: nexus3

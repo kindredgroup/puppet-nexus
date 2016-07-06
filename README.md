@@ -45,8 +45,30 @@ install them outside of this module.
 
 ### Beginning with nexus
 
-See test/integration/default/puppet/manifests/site.pp for minimal RHEL
+For Nexus 2 OSS example see test/integration/default/puppet/manifests/site.pp for minimal RHEL
 setup.
+
+Nexus 3 OSS support is available as well, see test/integration/nexus3/puppet/manifests/site.pp or this
+section that I copy pasted into the readme:
+
+```
+$java_packages = $::osfamily ? {
+  redhat  => 'java-1.8.0-openjdk',
+  debian  => ['openjdk-8-jdk', 'openjdk-8-jre']
+}
+if $::osfamily == 'RedHat' {
+  package { 'epel-release': ensure => installed } -> Package[$java_packages]
+}
+package { $java_packages: ensure => installed }
+
+package { ['tar', 'gzip', 'wget']: ensure => present } ->
+class { '::nexus':
+  download_url => 'http://download.sonatype.com/nexus/3/nexus-__VERSION__-unix.tar.gz',
+  version      => '3.0.0-03',
+  initmemory   => '512M',
+  maxmemory    => '512M',
+}
+```
 
 ## Usage
 
@@ -54,5 +76,4 @@ The only class that should be included in your manifest is the nexus class.
 
 ## Limitations
 
-Only tested on RHEL6.
-
+Only tested on RHEL6, may work on other distros and version combinations. Pull requests are always welcome!

@@ -13,19 +13,25 @@ class nexus::files {
         mode   => '0755'
       }
 
-      file { '/opt/sonatype-nexus/nexus/logs':
+      if versioncmp($::nexus::version, '3.0.0') < 0 or $::nexus::version == 'latest' {
+        $logdir = '/opt/sonatype-nexus/nexus/logs'
+        file { '/opt/sonatype-nexus/sonatype-work/nexus/plugin-repository':
+          ensure  => directory,
+          owner   => $::nexus::params::user,
+          group   => $::nexus::params::group,
+          mode    => '0755',
+          replace => false
+        }
+      } else {
+        $logdir = '/opt/sonatype-nexus/nexus/data/log'
+      }
+
+      file { $logdir:
         ensure => link,
         target => '/var/log/nexus',
         force  => true
       }
 
-      file { '/opt/sonatype-nexus/sonatype-work/nexus/plugin-repository':
-        ensure  => directory,
-        owner   => $::nexus::params::user,
-        group   => $::nexus::params::group,
-        mode    => '0755',
-        replace => false
-      }
     }
 
     absent: {

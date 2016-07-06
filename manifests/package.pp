@@ -9,11 +9,11 @@ class nexus::package {
     present: {
       case $::nexus::version {
         latest: {
-          $url = regsubst($::nexus::params::download_url, '__VERSION__', 'latest')
+          $url = regsubst($::nexus::download_url, '__VERSION__', 'latest')
           $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/$(ls -d nexus-*|tail -1) /opt/sonatype-nexus/nexus"
         }
         /^[0-9]+[0-9\.]+/: {
-          $url = regsubst($::nexus::params::download_url, '__VERSION__', $::nexus::version)
+          $url = regsubst($::nexus::download_url, '__VERSION__', $::nexus::version)
           $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/nexus-${::nexus::version} /opt/sonatype-nexus/nexus"
         }
         default: {
