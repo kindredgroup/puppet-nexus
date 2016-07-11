@@ -82,4 +82,14 @@ class nexus::config {
     }
   }
 
+  if $::osfamily == 'RedHat' and versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+    file { '/etc/systemd/system/nexus.service':
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+      source => "puppet:///modules/${module_name}/nexus.service",
+    }
+  }
+
 }
