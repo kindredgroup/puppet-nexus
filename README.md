@@ -76,4 +76,4 @@ The only class that should be included in your manifest is the nexus class.
 
 ## Limitations
 
-Only tested on RHEL6, may work on other distros and version combinations. Pull requests are always welcome!
+Only tested on EL6 and 7, may work on other distros and version combinations. Pull requests are always welcome!
