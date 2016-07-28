@@ -14,8 +14,8 @@ class nexus::files {
       }
 
       if versioncmp($::nexus::version, '3.0.0') < 0 or $::nexus::version == 'latest' {
-        $logdir = '/opt/sonatype-nexus/nexus/logs'
-        file { '/opt/sonatype-nexus/sonatype-work/nexus/plugin-repository':
+        $logdir = "${::nexus::install_directory}/nexus/logs"
+        file { "${::nexus::install_directory}/sonatype-work/nexus/plugin-repository":
           ensure  => directory,
           owner   => $::nexus::params::user,
           group   => $::nexus::params::group,
@@ -23,13 +23,20 @@ class nexus::files {
           replace => false
         }
       } else {
-        $logdir = '/opt/sonatype-nexus/nexus/data/log'
+        $logdir = "${::nexus::data_directory}/log"
       }
 
       file { $logdir:
         ensure => link,
         target => '/var/log/nexus',
         force  => true
+      }
+
+      file { $::nexus::data_directory:
+        ensure => directory,
+        owner  => $::nexus::params::user,
+        group  => $::nexus::params::group,
+        mode   => '0755',
       }
 
     }
