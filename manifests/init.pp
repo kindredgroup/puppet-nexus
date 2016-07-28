@@ -9,6 +9,9 @@
 #
 # [*version*]
 #   Version of Nexus to install, used to form the download url to the tar ball
+#   Latest will imply the latest version of 2.x, if you set the version to any
+#   valid 3.x version some conditional logic in the configuration class will
+#   detect that and configure the correct configuration files
 #   See $download_url in params.pp
 #
 # [*service_ensure*]
@@ -54,19 +57,22 @@
 # Copyright 2015 North Development AB, unless otherwise noted.
 #
 class nexus (
-  $ensure          = 'present',
-  $version         = 'latest',
-  $service_ensure  = 'running',
-  $service_enable  = true,
-  $service_refresh = true,
-  $port            = 8080,
-  $manage_user     = true,
-  $initmemory      = undef,
-  $maxmemory       = undef,
-  $maxpermsize     = undef,
-  $javacommand     = undef,
-  $plugins         = [],
-  $download_url    = $::nexus::params::download_url,
+  $ensure            = 'present',
+  $version           = 'latest',
+  $service_ensure    = 'running',
+  $service_enable    = true,
+  $service_refresh   = true,
+  $port              = 8080,
+  $manage_user       = true,
+  $initmemory        = undef,
+  $maxmemory         = undef,
+  $maxpermsize       = undef,
+  $javacommand       = undef,
+  $plugins           = [],
+  $download_url      = $::nexus::params::download_url,
+  $install_directory = $::nexus::params::install_directory,
+  $data_directory    = $::nexus::params::data_directory,
+  $tmp_directory     = $::nexus::params::tmp_directory,
 ) inherits ::nexus::params {
 
   # contain the class

@@ -48,5 +48,5 @@ platforms:
 <% end %>
 
 suites:
-  - name: default
+  - name: nexus2
   - name: nexus3

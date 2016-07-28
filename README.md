@@ -36,12 +36,15 @@ profile module.
 * Creates user and group
 * Supports installation of plugins
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
 This module assumes you already have the required JDK installed, and the
 tar ball installation depends on wget, tar and gzip, rather than locking
 you to a particular module implementation of these tools you should
 install them outside of this module.
+
+Oracle JDK is required for Nexus to function as expected, actually Nexus 2 does
+not even start when using OpenJDK.
 
 ### Beginning with nexus
 
@@ -63,12 +66,30 @@ package { $java_packages: ensure => installed }
 
 package { ['tar', 'gzip', 'wget']: ensure => present } ->
 class { '::nexus':
-  download_url => 'http://download.sonatype.com/nexus/3/nexus-__VERSION__-unix.tar.gz',
+  download_url => 'http://download.sonatype.com/nexus/3/nexus-3.0.0-03-unix.tar.gz',
   version      => '3.0.0-03',
   initmemory   => '512M',
   maxmemory    => '512M',
 }
 ```
+
+By default the data directory is stored in the installation folder of the Nexus 3 distribution
+you should control this by setting some extra parameters, moving the data directory outside
+of the installation dir:
+
+```
+class { '::nexus':
+  download_url   => 'http://download.sonatype.com/nexus/3/nexus-3.0.0-03-unix.tar.gz',
+  version        => '3.0.0-03',
+  data_directory => '/opt/sonatype-data',
+  tmp_directory  => '/opt/sonatype-data/tmp',
+}
+```
+
+Upgrades can be done by setting a new version but take caution when doing this
+on mission critical systems, it is recommended to test upgrade before hand, have the
+proper backups in place etc. For example upgrading from 3.0.0-03 to 3.0.1-01 required
+purging of karaf bundle cache files: https://issues.sonatype.org/browse/NEXUS-10449
 
 ## Usage
 

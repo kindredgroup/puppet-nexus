@@ -22,6 +22,11 @@ describe 'nexus' do
         should_not contain_file_line('nexus_javacommand')
       end
 
+      it "should contain nexus 2 config settings" do
+        should contain_class('nexus::config::v2')
+        should_not contain_class('nexus::config::v3')
+      end
+
     end
 
     context 'with plugin yum' do
@@ -67,6 +72,8 @@ describe 'nexus' do
 
       it { should compile.with_all_deps }
       it { should contain_file_line('nexus_initmemory').with_line('-Xms1234M') }
+      it { should contain_class('nexus::config::v3') }
+      it { should_not contain_class('nexus::config::v2') }
 
     end
 

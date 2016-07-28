@@ -10,11 +10,13 @@ class nexus::package {
       case $::nexus::version {
         latest: {
           $url = regsubst($::nexus::download_url, '__VERSION__', 'latest')
-          $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/$(ls -d nexus-*|tail -1) /opt/sonatype-nexus/nexus"
+          $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s ${::nexus::install_directory}/$(ls -d nexus-*|tail -1) ${::nexus::install_directory}/nexus"
+          $creates = "${::nexus::install_directory}/nexus"
         }
         /^[0-9]+[0-9\.]+/: {
           $url = regsubst($::nexus::download_url, '__VERSION__', $::nexus::version)
-          $command = "wget --no-check-certificate -O - ${url} | tar zxf - && ln -s /opt/sonatype-nexus/nexus-${::nexus::version} /opt/sonatype-nexus/nexus"
+          $command = "wget --no-check-certificate -O - ${url} | tar zxf - && rm -f ${::nexus::install_directory}/nexus && ln -s ${::nexus::install_directory}/nexus-${::nexus::version} ${::nexus::install_directory}/nexus"
+          $creates = "${::nexus::install_directory}/nexus-${::nexus::version}"
         }
         default: {
           fail("Could not parse version ${::nexus::version}")
@@ -23,24 +25,24 @@ class nexus::package {
 
       exec { 'install_nexus':
         command => $command,
-        cwd     => '/opt/sonatype-nexus',
+        cwd     => $::nexus::install_directory,
         path    => ['/bin', '/usr/bin'],
-        creates => '/opt/sonatype-nexus/nexus',
-        require => File['/opt/sonatype-nexus']
+        creates => $creates,
+        require => File[$::nexus::install_directory],
       } ~>
       exec { 'set_nexus_permissions':
-        command     => "chown -R ${::nexus::params::user}:${::nexus::params::group} /opt/sonatype-nexus",
+        command     => "chown -R ${::nexus::params::user}:${::nexus::params::group} ${::nexus::install_directory}",
         path        => ['/bin', '/usr/bin'],
         refreshonly => true
       }
 
       file { '/etc/init.d/nexus':
         ensure  => link,
-        target  => '/opt/sonatype-nexus/nexus/bin/nexus',
+        target  => "${::nexus::install_directory}/nexus/bin/nexus",
         require => Exec['install_nexus']
       }
 
-      file { '/opt/sonatype-nexus':
+      file { $::nexus::install_directory:
         ensure => directory,
         owner  => $::nexus::params::user,
         group  => $::nexus::params::group,
@@ -53,7 +55,7 @@ class nexus::package {
         ensure  => absent
       }
 
-      file {'/opt/sonatype-nexus':
+      file { $::nexus::install_directory:
         ensure  => absent,
         force   => true,
         purge   => true,
